@@ -73,7 +73,7 @@ export interface Appointment {
   duration_minutes?: number
   type?: string
   reason: string
-  status: 'scheduled' | 'confirmed' | 'in-progress' | 'completed' | 'cancelled'
+  status: 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'no_show'
   notes?: string
   diagnosis?: string
   treatment?: string

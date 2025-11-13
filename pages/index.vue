@@ -243,90 +243,71 @@ const fetchDashboardData = async () => {
   try {
     // Fetch stats
     const statsResponse = await $apiService.dashboard.getStats()
-    if (statsResponse.data) {
-      stats.value = statsResponse.data
+    
+    if (statsResponse?.data) {
+      const data = statsResponse.data
+      
+      // Map backend response to frontend stats structure
+      // Backend returns different structure based on user role
+      if (data.today) {
+        // Staff dashboard structure
+        stats.value = {
+          todayAppointments: data.appointments?.today || data.today?.appointments || 0,
+          activePets: data.pets?.total || 0,
+          pendingBills: data.revenue?.unpaid_total || 0,
+          lowStockItems: data.inventory?.low_stock_count || 0
+        }
+      } else if (data.pets || data.appointments) {
+        // Owner dashboard structure
+        stats.value = {
+          todayAppointments: data.appointments?.today || 0,
+          activePets: data.pets?.total || data.pets?.active || 0,
+          pendingBills: data.invoices?.unpaid || 0,
+          lowStockItems: 0 // Owners don't see stock
+        }
+      }
     }
 
     // Fetch today's appointments
     const appointmentsResponse = await $apiService.appointments.getTodayAppointments()
-    if (appointmentsResponse.data) {
+    
+    if (appointmentsResponse?.data) {
       todayAppointments.value = appointmentsResponse.data.map((apt: Appointment) => ({
         id: apt.id,
         petName: apt.pet?.name || 'Unknown',
         ownerName: apt.owner?.name || 'Unknown',
         type: apt.reason,
-        time: apt.appointment_time,
+        time: formatTime(apt.appointment_time || apt.appointment_date),
         status: apt.status
       }))
     }
 
     // Fetch recent activity
     const activityResponse = await $apiService.dashboard.getRecentActivity()
-    if (activityResponse.data) {
+    if (activityResponse?.data) {
       recentActivity.value = activityResponse.data
     }
   } catch (error: any) {
-    console.error('Error fetching dashboard data:', handleError(error))
-    // Fallback to mock data for development
-    stats.value = {
-      todayAppointments: 12,
-      activePets: 247,
-      pendingBills: 8,
-      lowStockItems: 5
-    }
-
-    todayAppointments.value = [
-      {
-        id: 1,
-        petName: 'Max',
-        ownerName: 'John Doe',
-        type: 'Checkup',
-        time: '09:00 AM',
-        status: 'confirmed'
-      },
-      {
-        id: 2,
-        petName: 'Bella',
-        ownerName: 'Jane Smith',
-        type: 'Vaccination',
-        time: '10:30 AM',
-        status: 'pending'
-      },
-      {
-        id: 3,
-        petName: 'Charlie',
-        ownerName: 'Bob Johnson',
-        type: 'Surgery',
-        time: '02:00 PM',
-        status: 'confirmed'
-      }
-    ]
-
-    recentActivity.value = [
-      {
-        id: 1,
-        type: 'appointment',
-        description: 'New appointment scheduled for Max',
-        timestamp: new Date(Date.now() - 5 * 60000).toISOString(),
-        icon: 'mdi:calendar-plus'
-      },
-      {
-        id: 2,
-        type: 'payment',
-        description: 'Invoice #1234 paid by Jane Smith',
-        timestamp: new Date(Date.now() - 15 * 60000).toISOString(),
-        icon: 'mdi:receipt'
-      },
-      {
-        id: 3,
-        type: 'alert',
-        description: 'Low stock alert: Dog Food - Premium',
-        timestamp: new Date(Date.now() - 60 * 60000).toISOString(),
-        icon: 'mdi:alert'
-      }
-    ]
+    console.error('Error fetching dashboard data:', error)
+    const errorMessage = handleError(error)
+    console.error('Formatted error:', errorMessage)
   } finally {
     loading.value = false
+  }
+}
+
+const formatTime = (datetime: string) => {
+  if (!datetime) return 'N/A'
+  
+  try {
+    const date = new Date(datetime)
+    return date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    })
+  } catch (e) {
+    return datetime
   }
 }
 

@@ -53,11 +53,6 @@ export class AppointmentService {
     return response.data
   }
 
-  async start(id: number): Promise<ApiResponse<Appointment>> {
-    const response = await this.api.post(`/appointments/${id}/start`)
-    return response.data
-  }
-
   async complete(id: number): Promise<ApiResponse<Appointment>> {
     const response = await this.api.post(`/appointments/${id}/complete`)
     return response.data

@@ -8,7 +8,7 @@ export class DashboardService {
     this.api = api
   }
 
-  async getStats(): Promise<ApiResponse<DashboardStats>> {
+  async getStats(): Promise<ApiResponse<any>> {
     const response = await this.api.get('/dashboard')
     return response.data
   }

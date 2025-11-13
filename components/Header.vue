@@ -75,17 +75,6 @@
             <Icon :name="isDark ? 'mdi:weather-sunny' : 'mdi:weather-night'" class="w-5 h-5 transition-transform duration-300 hover:rotate-12" />
           </button>
 
-          <!-- Notifications -->
-          <button
-            class="relative p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gradient-to-br hover:from-gray-100 hover:to-gray-50 dark:hover:from-zinc-800 dark:hover:to-zinc-800/50 transition-all duration-200 hidden sm:block hover:shadow-md"
-            :title="t('common.notifications')"
-          >
-            <Icon name="mdi:bell" class="w-5 h-5" />
-            <span class="absolute top-1.5 ltr:right-1.5 rtl:left-1.5 flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500 ring-2 ring-white dark:ring-zinc-900"></span>
-            </span>
-          </button>
         </div>
       </div>
     </div>

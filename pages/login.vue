@@ -79,6 +79,9 @@
             {{ t('auth.demoCredentials') }}
           </p>
         </div>
+        <div class="flex gap-3">
+          <button class="">{{ t('admin') }}</button>
+        </div>
       </div>
     </div>
   </div>

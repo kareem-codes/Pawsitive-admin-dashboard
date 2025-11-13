@@ -7,7 +7,7 @@
     ]">
     <div class="flex flex-col h-full">
       <!-- Logo -->
-      <div class="flex items-center h-16 px-6 border-b border-gray-200 dark:border-zinc-800 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 relative overflow-hidden">
+      <div class="flex items-center h-16 px-3 border-b border-gray-200 dark:border-zinc-800 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
         <Icon name="mdi:paw" class="w-8 h-8 text-white ltr:mr-3 rtl:ml-3 animate-pulse" />
         <span class="text-xl font-bold text-white relative z-10">{{ t('common.appName') }}</span>

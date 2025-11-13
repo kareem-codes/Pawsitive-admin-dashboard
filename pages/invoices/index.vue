@@ -382,9 +382,20 @@ const fetchInvoices = async (page: number = 1) => {
     }
 
     // Calculate stats
-    stats.value.total_revenue = response.data.reduce((sum: number, inv: Invoice) => sum + (parseFloat(String(inv.total_amount || 0)) || 0), 0)
-    stats.value.pending_amount = response.data.filter((inv: Invoice) => inv.status === 'pending').reduce((sum: number, inv: Invoice) => sum + (inv.total_amount || inv.total || 0), 0)
+    
+    const totalRevenue = response.data.reduce(
+      (sum: number, inv: Invoice) => sum + (parseFloat(String(inv.total_amount || 0)) || 0),
+      0
+    )
+
+    const pendingAmount = response.data
+      .filter((inv: Invoice) => inv.status === 'pending')
+      .reduce((sum: number, inv: Invoice) => sum + (parseFloat(String(inv.total_amount || inv.total || 0)) || 0), 0)
+
+    stats.value.total_revenue = parseFloat(totalRevenue.toFixed(2))
+    stats.value.pending_amount = parseFloat(pendingAmount.toFixed(2))
     stats.value.paid_count = response.data.filter((inv: Invoice) => inv.status === 'paid').length
+
     stats.value.overdue_count = response.data.filter((inv: Invoice) => inv.status === 'overdue').length
   } catch (error) {
     console.error('Error fetching invoices:', handleError(error))

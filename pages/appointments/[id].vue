@@ -17,39 +17,32 @@
             {{ formatDate(appointment?.appointment_date) }} {{ t('appointments.at') }} {{ appointment?.appointment_time || formatTime(appointment?.appointment_date) }}
           </p>
         </div>
-        <div class="flex gap-3">
+        <div class="flex flex-wrap gap-2 sm:gap-3">
           <button
-            v-if="appointment?.status === 'scheduled'"
+            v-if="appointment?.status === 'pending'"
             @click="confirmAppointment"
-            class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all font-semibold">
-            <Icon name="mdi:check" class="w-5 h-5" />
+            class="flex items-center gap-1.5 sm:gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all text-sm sm:text-base font-semibold">
+            <Icon name="mdi:check" class="w-4 h-4 sm:w-5 sm:h-5" />
             {{ t('appointments.confirm') }}
           </button>
           <button
             v-if="appointment?.status === 'confirmed'"
-            @click="startAppointment"
-            class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all font-semibold">
-            <Icon name="mdi:play" class="w-5 h-5" />
-            {{ t('appointments.start') }}
-          </button>
-          <button
-            v-if="appointment?.status === 'in-progress'"
             @click="completeAppointment"
-            class="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all font-semibold">
-            <Icon name="mdi:check-all" class="w-5 h-5" />
+            class="flex items-center gap-1.5 sm:gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all text-sm sm:text-base font-semibold">
+            <Icon name="mdi:check-all" class="w-4 h-4 sm:w-5 sm:h-5" />
             {{ t('appointments.complete') }}
           </button>
           <button
-            v-if="appointment && ['scheduled', 'confirmed'].includes(appointment.status)"
+            v-if="appointment && ['pending', 'confirmed'].includes(appointment.status)"
             @click="cancelAppointment"
-            class="flex items-center gap-2 border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all font-semibold">
-            <Icon name="mdi:close" class="w-5 h-5" />
+            class="flex items-center gap-1.5 sm:gap-2 border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all text-sm sm:text-base font-semibold">
+            <Icon name="mdi:close" class="w-4 h-4 sm:w-5 sm:h-5" />
             {{ t('common.cancel') }}
           </button>
           <NuxtLink
             :to="`/appointments/create?id=${route.params.id}`"
-            class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all font-semibold">
-            <Icon name="mdi:pencil" class="w-5 h-5" />
+            class="flex items-center gap-1.5 sm:gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all text-sm sm:text-base font-semibold">
+            <Icon name="mdi:pencil" class="w-4 h-4 sm:w-5 sm:h-5" />
             {{ t('common.edit') }}
           </NuxtLink>
         </div>
@@ -75,11 +68,11 @@
             </h2>
             <span
               :class="{
-                'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400': appointment.status === 'scheduled',
+                'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400': appointment.status === 'pending',
                 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400': appointment.status === 'confirmed',
-                'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400': appointment.status === 'in-progress',
                 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400': appointment.status === 'completed',
                 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400': appointment.status === 'cancelled',
+                'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400': appointment.status === 'no_show',
               }"
               class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold capitalize">
               <Icon :name="getStatusIcon(appointment.status)" class="w-4 h-4" />
@@ -392,17 +385,6 @@ const confirmAppointment = async () => {
   }
 }
 
-const startAppointment = async () => {
-  if (!appointment.value) return
-  
-  try {
-    await $apiService.appointments.start(appointment.value.id)
-    await fetchAppointment()
-  } catch (error) {
-    console.error('Error starting appointment:', handleError(error))
-  }
-}
-
 const completeAppointment = async () => {
   if (!appointment.value) return
   
@@ -463,11 +445,11 @@ const formatDateTime = (dateString?: string) => {
 
 const getStatusIcon = (status: string) => {
   const icons: { [key: string]: string } = {
-    'scheduled': 'mdi:clock-outline',
+    'pending': 'mdi:clock-outline',
     'confirmed': 'mdi:check-circle',
-    'in-progress': 'mdi:progress-clock',
     'completed': 'mdi:check-all',
-    'cancelled': 'mdi:close-circle'
+    'cancelled': 'mdi:close-circle',
+    'no_show': 'mdi:account-remove'
   }
   return icons[status] || 'mdi:circle'
 }

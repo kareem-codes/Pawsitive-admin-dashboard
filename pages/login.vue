@@ -73,14 +73,47 @@
           </button>
         </form>
 
-        <!-- Demo Notice -->
-        <div class="mt-6 text-center">
-          <p class="text-sm text-gray-600 dark:text-gray-400">
-            {{ t('auth.demoCredentials') }}
-          </p>
-        </div>
-        <div class="flex gap-3">
-          <button class="">{{ t('admin') }}</button>
+        <!-- Quick Login Buttons -->
+        <div class="mt-6">
+          <div class="text-center mb-3">
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+              {{ t('auth.quickLogin') }}
+            </p>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <button
+              @click="quickLogin('admin@pawsitive.com', 'password')"
+              type="button"
+              :disabled="loading"
+              class="flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 text-white text-sm font-semibold rounded-xl transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+              <Icon name="mdi:shield-crown" class="w-4 h-4" />
+              {{ t('auth.admin') }}
+            </button>
+            <button
+              @click="quickLogin('vet1@pawsitive.com', 'password')"
+              type="button"
+              :disabled="loading"
+              class="flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 text-white text-sm font-semibold rounded-xl transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+              <Icon name="mdi:doctor" class="w-4 h-4" />
+              {{ t('auth.vet') }}
+            </button>
+            <button
+              @click="quickLogin('receptionist@pawsitive.com', 'password')"
+              type="button"
+              :disabled="loading"
+              class="flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 text-white text-sm font-semibold rounded-xl transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+              <Icon name="mdi:desk" class="w-4 h-4" />
+              {{ t('auth.receptionist') }}
+            </button>
+            <button
+              @click="quickLogin('cashier@pawsitive.com', 'password')"
+              type="button"
+              :disabled="loading"
+              class="flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 disabled:from-gray-400 disabled:to-gray-500 text-white text-sm font-semibold rounded-xl transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+              <Icon name="mdi:cash-register" class="w-4 h-4" />
+              {{ t('auth.cashier') }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -117,5 +150,11 @@ const handleLogin = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const quickLogin = async (email: string, password: string) => {
+  form.email = email
+  form.password = password
+  await handleLogin()
 }
 </script>

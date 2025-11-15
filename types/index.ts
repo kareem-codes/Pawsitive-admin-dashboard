@@ -38,7 +38,7 @@ export interface Pet {
   medical_history?: string
   allergies?: string
   microchip_id?: string
-  image_url?: string
+  photo_url?: string
   status: 'active' | 'inactive' | 'deceased'
   created_at: string
   updated_at: string
@@ -51,6 +51,7 @@ export interface Owner {
   phone: string
   address?: string
   city?: string
+  state?: string
   postal_code?: string
   emergency_contact?: string
   emergency_phone?: string

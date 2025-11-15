@@ -134,7 +134,10 @@
 
           <div v-if="appointment.pet" class="space-y-4">
             <div class="flex items-center gap-4">
-              <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 flex items-center justify-center">
+              <div v-if="appointment.pet.photo_url" class="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0">
+                <img :src="appointment.pet.photo_url" :alt="appointment.pet.name" class="w-full h-full object-cover" />
+              </div>
+              <div v-else class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 flex items-center justify-center flex-shrink-0">
                 <Icon name="mdi:paw" class="w-8 h-8 text-purple-600 dark:text-purple-400" />
               </div>
               <div>

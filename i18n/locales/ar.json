@@ -80,7 +80,12 @@
     "loginSuccess": "تم تسجيل الدخول بنجاح",
     "loginError": "بيانات اعتماد غير صالحة. يرجى المحاولة مرة أخرى.",
     "logout": "تسجيل الخروج",
-    "demoCredentials": "تجريبي: استخدم أي بريد إلكتروني/كلمة مرور للمتابعة"
+    "demoCredentials": "تجريبي: استخدم أي بريد إلكتروني/كلمة مرور للمتابعة",
+    "quickLogin": "تسجيل دخول سريع (تجريبي)",
+    "admin": "مدير",
+    "vet": "طبيب بيطري",
+    "receptionist": "موظف استقبال",
+    "cashier": "أمين صندوق"
   },
   "nav": {
     "dashboard": "لوحة التحكم",
@@ -331,7 +336,11 @@
     "memberSince": "عضو منذ",
     "ownerNotFound": "المالك غير موجود",
     "ownerNotFoundDesc": "المالك الذي تبحث عنه غير موجود أو تم حذفه.",
-    "backToOwners": "العودة لأصحاب الحيوانات"
+    "backToOwners": "العودة لأصحاب الحيوانات",
+    "shippingAddress": "عنوان الشحن",
+    "streetAddress": "عنوان الشارع",
+    "cityStatePostal": "المدينة، المنطقة والرمز البريدي",
+    "viewOnMap": "عرض على خرائط جوجل"
   },
   "products": {
     "title": "المنتجات والمخزون",
@@ -496,16 +505,19 @@
     "backToInvoices": "العودة للفواتير",
     "paymentAmount": "مبلغ الدفع",
     "cash": "نقدي",
-    "card": "بطاقة ائتمان/خصم",
+    "creditCard": "بطاقة ائتمان",
+    "debitCard": "بطاقة خصم",
     "bankTransfer": "تحويل بنكي",
-    "check": "شيك",
+    "other": "أخرى",
     "deleteConfirm": "حذف الفاتورة؟",
     "deleteWarning": "هل أنت متأكد من حذف الفاتورة",
     "deleteIrreversible": "هذا الإجراء لا يمكن التراجع عنه.",
     "errorLoadingOwners": "فشل تحميل الملاك",
     "errorLoadingInvoice": "فشل تحميل الفاتورة",
     "errorSaving": "فشل حفظ الفاتورة",
-    "comingSoon": "وحدة الفواتير قريباً..."
+    "comingSoon": "وحدة الفواتير قريباً...",
+    "customerAddress": "عنوان العميل",
+    "shippingAddress": "عنوان الشحن"
   },
   "medicalRecords": {
     "title": "السجلات الطبية",

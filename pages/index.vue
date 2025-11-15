@@ -136,7 +136,10 @@
         >
           <div class="flex items-center ltr:space-x-3 rtl:space-x-3 rtl:space-x-reverse">
             <div class="flex-shrink-0">
-              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 flex items-center justify-center ring-2 ring-white dark:ring-zinc-900 shadow-sm group-hover:scale-110 transition-transform">
+              <div v-if="appointment.petImage" class="w-12 h-12 rounded-xl overflow-hidden ring-2 ring-white dark:ring-zinc-900 shadow-sm group-hover:scale-110 transition-transform">
+                <img :src="appointment.petImage" :alt="appointment.petName" class="w-full h-full object-cover" />
+              </div>
+              <div v-else class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 flex items-center justify-center ring-2 ring-white dark:ring-zinc-900 shadow-sm group-hover:scale-110 transition-transform">
                 <Icon name="mdi:paw" class="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
               </div>
             </div>
@@ -275,6 +278,7 @@ const fetchDashboardData = async () => {
       todayAppointments.value = appointmentsResponse.data.map((apt: Appointment) => ({
         id: apt.id,
         petName: apt.pet?.name || 'Unknown',
+        petImage: apt.pet?.photo_url || null,
         ownerName: apt.owner?.name || 'Unknown',
         type: apt.reason,
         time: formatTime(apt.appointment_time || apt.appointment_date),

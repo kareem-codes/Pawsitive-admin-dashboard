@@ -136,6 +136,57 @@
           </div>
         </div>
 
+        <!-- Shipping Address Card (Shop Orders Only) -->
+        <div v-if="isShopOrder && shippingAddress" class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl shadow-xl p-6 border border-blue-200 dark:border-blue-800">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+            <Icon name="mdi:map-marker" class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            {{ t('invoices.shippingAddress') }}
+          </h2>
+
+          <div class="bg-white/60 dark:bg-zinc-900/60 rounded-xl p-5 border border-blue-100 dark:border-blue-800/50">
+            <div class="space-y-3">
+              <div v-if="shippingAddress.address" class="flex items-start gap-3">
+                <Icon name="mdi:home-map-marker" class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ t('owners.streetAddress') }}</p>
+                  <p class="text-base font-semibold text-gray-900 dark:text-white">{{ shippingAddress.address }}</p>
+                </div>
+              </div>
+
+              <div v-if="shippingAddress.city || shippingAddress.state || shippingAddress.postal_code" class="flex items-start gap-3">
+                <Icon name="mdi:city" class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ t('owners.cityStatePostal') }}</p>
+                  <p class="text-base font-semibold text-gray-900 dark:text-white">
+                    {{ [shippingAddress.city, shippingAddress.state, shippingAddress.postal_code].filter(Boolean).join(', ') }}
+                  </p>
+                </div>
+              </div>
+
+              <div v-if="shippingAddress.phone" class="flex items-start gap-3">
+                <Icon name="mdi:phone" class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ t('owners.phone') }}</p>
+                  <p class="text-base font-semibold text-gray-900 dark:text-white">{{ shippingAddress.phone }}</p>
+                </div>
+              </div>
+
+              <!-- Map Link -->
+              <div v-if="shippingAddress.address" class="pt-3 border-t border-blue-100 dark:border-blue-800/50">
+                <a
+                  :href="`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([shippingAddress.address, shippingAddress.city, shippingAddress.state, shippingAddress.postal_code].filter(Boolean).join(', '))}`"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-semibold text-sm transition-colors">
+                  <Icon name="mdi:google-maps" class="w-4 h-4" />
+                  {{ t('owners.viewOnMap') }}
+                  <Icon name="mdi:open-in-new" class="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Invoice Items Card -->
         <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-zinc-800">
           <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
@@ -169,10 +220,10 @@
                     <p class="text-gray-900 dark:text-white">{{ item.quantity }}</p>
                   </td>
                   <td class="py-4 px-2 text-right">
-                    <p class="text-gray-900 dark:text-white">${{ item.unit_price.toFixed(2) }}</p>
+                    <p class="text-gray-900 dark:text-white">${{ item.unit_price }}</p>
                   </td>
                   <td class="py-4 px-2 text-right">
-                    <p class="font-semibold text-gray-900 dark:text-white">${{ item.total.toFixed(2) }}</p>
+                    <p class="font-semibold text-gray-900 dark:text-white">${{ item.total }}</p>
                   </td>
                 </tr>
               </tbody>
@@ -189,34 +240,34 @@
             <div class="max-w-sm ml-auto space-y-3">
               <div class="flex justify-between text-base">
                 <span class="text-gray-600 dark:text-gray-400">{{ t('invoices.subtotal') }}:</span>
-                <span class="font-semibold text-gray-900 dark:text-white">${{ (invoice.subtotal || 0).toFixed(2) }}</span>
+                <span class="font-semibold text-gray-900 dark:text-white">${{ (invoice.subtotal || 0) }}</span>
               </div>
               <div v-if="invoice.tax || invoice.tax_amount" class="flex justify-between text-base">
                 <span class="text-gray-600 dark:text-gray-400">{{ t('invoices.tax') }}:</span>
-                <span class="font-semibold text-gray-900 dark:text-white">${{ (invoice.tax || invoice.tax_amount || 0).toFixed(2) }}</span>
+                <span class="font-semibold text-gray-900 dark:text-white">${{ (invoice.tax || invoice.tax_amount || 0) }}</span>
               </div>
               <div v-if="invoice.discount || invoice.discount_amount" class="flex justify-between text-base text-red-600 dark:text-red-400">
                 <span>{{ t('invoices.discount') }}:</span>
-                <span class="font-semibold">-${{ (invoice.discount || invoice.discount_amount || 0).toFixed(2) }}</span>
+                <span class="font-semibold">-${{ (invoice.discount || invoice.discount_amount || 0) }}</span>
               </div>
               <div class="flex justify-between text-xl font-bold pt-3 border-t border-gray-200 dark:border-zinc-700">
                 <span class="text-gray-900 dark:text-white">{{ t('invoices.total') }}:</span>
-                <span class="text-emerald-600 dark:text-emerald-400">${{ (invoice.total || invoice.total_amount || 0).toFixed(2) }}</span>
+                <span class="text-emerald-600 dark:text-emerald-400">${{ (invoice.total || invoice.total_amount || 0) }}</span>
               </div>
               <div v-if="invoice.paid_amount" class="flex justify-between text-base">
                 <span class="text-gray-600 dark:text-gray-400">{{ t('invoices.paidAmount') }}:</span>
-                <span class="font-semibold text-emerald-600 dark:text-emerald-400">${{ (invoice.paid_amount || 0).toFixed(2) }}</span>
+                <span class="font-semibold text-emerald-600 dark:text-emerald-400">${{ (invoice.paid_amount || 0) }}</span>
               </div>
               <div v-if="invoice.paid_amount && invoice.paid_amount < (invoice.total || invoice.total_amount || 0)" class="flex justify-between text-lg font-bold text-red-600 dark:text-red-400">
                 <span>{{ t('invoices.balanceDue') }}:</span>
-                <span>${{ ((invoice.total || invoice.total_amount || 0) - (invoice.paid_amount || 0)).toFixed(2) }}</span>
+                <span>${{ ((invoice.total || invoice.total_amount || 0) - (invoice.paid_amount || 0)) }}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Notes Card -->
-        <div v-if="invoice.notes" class="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-zinc-800">
+        <!-- Notes Card (Not for Shop Orders) -->
+        <div v-if="invoice.notes && !isShopOrder" class="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-zinc-800">
           <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
             <Icon name="mdi:note-text" class="w-6 h-6 text-gray-600 dark:text-gray-400" />
             {{ t('common.notes') }}
@@ -429,9 +480,10 @@
               class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none transition-all"
               required>
               <option value="cash">{{ t('invoices.cash') }}</option>
-              <option value="card">{{ t('invoices.card') }}</option>
+              <option value="credit_card">{{ t('invoices.creditCard') }}</option>
+              <option value="debit_card">{{ t('invoices.debitCard') }}</option>
               <option value="bank_transfer">{{ t('invoices.bankTransfer') }}</option>
-              <option value="check">{{ t('invoices.check') }}</option>
+              <option value="other">{{ t('invoices.other') }}</option>
             </select>
           </div>
 
@@ -479,6 +531,7 @@ const router = useRouter()
 const { t } = useI18n()
 const { $apiService } = useNuxtApp()
 const { handleError } = useErrorHandler()
+const authStore = useAuthStore()
 
 const loading = ref(true)
 const invoice = ref<Invoice | null>(null)
@@ -491,13 +544,49 @@ const paymentForm = ref({
   date: new Date().toISOString().split('T')[0]
 })
 
+const isShopOrder = computed(() => {
+  if (!invoice.value) return false
+    const hasShopOrderNotes = invoice.value.notes?.startsWith('SHOP ORDER') ?? false
+  
+  console.log('isShopOrder check:', {
+    hasShopOrderNotes,
+    created_by: invoice.value.created_by,
+    user_id: invoice.value.user_id,
+    notes_preview: invoice.value.notes?.substring(0, 50)
+  })
+  
+  return hasShopOrderNotes
+})
+
+const shippingAddress = computed(() => {
+  if (!isShopOrder.value || !invoice.value?.notes) {
+    return null
+  }
+
+  const notes = invoice.value.notes
+  const addressMatch = notes.match(/Shipping Address:\s*(.+)/)
+  const cityMatch = notes.match(/City:\s*(.+)/)
+  const stateMatch = notes.match(/State:\s*(.+)/)
+  const postalMatch = notes.match(/Postal Code:\s*(.+)/)
+  const phoneMatch = notes.match(/Phone:\s*(.+)/)
+
+  if (!addressMatch || !addressMatch[1]) return null
+
+  return {
+    address: addressMatch[1].trim(),
+    city: cityMatch && cityMatch[1] ? cityMatch[1].trim() : undefined,
+    state: stateMatch && stateMatch[1] ? stateMatch[1].trim() : undefined,
+    postal_code: postalMatch && postalMatch[1] ? postalMatch[1].trim() : undefined,
+    phone: phoneMatch && phoneMatch[1] ? phoneMatch[1].trim() : undefined
+  }
+})
+
 const fetchInvoice = async () => {
   loading.value = true
   try {
     const response = await $apiService.invoices.getById(Number(route.params.id))
-    invoice.value = response
+    invoice.value = response.data || response
     
-    // Set default payment amount to remaining balance
     if (invoice.value) {
       const total = invoice.value.total || invoice.value.total_amount || 0
       const paid = invoice.value.paid_amount || 0
@@ -515,10 +604,16 @@ const submitPayment = async () => {
   
   submittingPayment.value = true
   try {
-    await $apiService.invoices.recordPayment(invoice.value.id, {
+    // Generate a unique payment number
+    const paymentNumber = 'PAY-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8).toUpperCase()
+    
+    await $apiService.payments.create({
+      invoice_id: invoice.value.id,
+      payment_number: paymentNumber,
       amount: paymentForm.value.amount,
       payment_method: paymentForm.value.method,
-      payment_date: paymentForm.value.date
+      payment_date: paymentForm.value.date,
+      received_by: authStore.user?.id || 1,
     })
     
     showPaymentModal.value = false

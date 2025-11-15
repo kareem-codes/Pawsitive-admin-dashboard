@@ -10,8 +10,8 @@
       </button>
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div class="flex items-center gap-4">
-          <div v-if="pet?.image_url" class="w-20 h-20 rounded-2xl overflow-hidden bg-gray-100 dark:bg-zinc-800">
-            <img :src="pet.image_url" :alt="pet.name" class="w-full h-full object-cover" />
+          <div v-if="pet?.photo_url" class="w-20 h-20 rounded-2xl overflow-hidden bg-gray-100 dark:bg-zinc-800">
+            <img :src="pet.photo_url" :alt="pet.name" class="w-full h-full object-cover" />
           </div>
           <div v-else class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 flex items-center justify-center">
             <Icon name="mdi:paw" class="w-10 h-10 text-purple-600 dark:text-purple-400" />

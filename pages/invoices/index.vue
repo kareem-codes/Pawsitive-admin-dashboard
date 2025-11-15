@@ -217,13 +217,13 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right">
                 <div class="flex items-center justify-start gap-2">
-                  <button
+                  <!-- <button
                     v-if="invoice.status === 'pending'"
                     @click.stop="recordPayment(invoice)"
                     class="p-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/30 transition-all"
                     :title="t('invoices.recordPayment')">
                     <Icon name="mdi:cash" class="w-4 h-4" />
-                  </button>
+                  </button> -->
                   <button
                     @click.stop="editInvoice(invoice.id)"
                     class="p-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-all"

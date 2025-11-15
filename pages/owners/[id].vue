@@ -81,26 +81,48 @@
                 {{ owner.phone }}
               </a>
             </div>
+          </div>
+        </div>
 
-            <div v-if="owner.address">
-              <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
-                {{ t('owners.address') }}
-              </label>
-              <p class="text-base text-gray-900 dark:text-white">{{ owner.address }}</p>
-            </div>
+        <!-- Address Card -->
+        <div v-if="owner.address || owner.city || owner.state || owner.postal_code" class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl shadow-xl p-6 border border-blue-200 dark:border-blue-800">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+            <Icon name="mdi:map-marker" class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            {{ t('owners.shippingAddress') }}
+          </h2>
 
-            <div v-if="owner.city">
-              <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
-                {{ t('owners.city') }}
-              </label>
-              <p class="text-base text-gray-900 dark:text-white">{{ owner.city }}</p>
-            </div>
+          <div class="bg-white/60 dark:bg-zinc-900/60 rounded-xl p-5 border border-blue-100 dark:border-blue-800/50">
+            <div class="space-y-3">
+              <div v-if="owner.address" class="flex items-start gap-3">
+                <Icon name="mdi:home-map-marker" class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ t('owners.streetAddress') }}</p>
+                  <p class="text-base font-semibold text-gray-900 dark:text-white">{{ owner.address }}</p>
+                </div>
+              </div>
 
-            <div v-if="owner.postal_code">
-              <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
-                {{ t('owners.postalCode') }}
-              </label>
-              <p class="text-base text-gray-900 dark:text-white">{{ owner.postal_code }}</p>
+              <div v-if="owner.city || owner.state || owner.postal_code" class="flex items-start gap-3">
+                <Icon name="mdi:city" class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ t('owners.cityStatePostal') }}</p>
+                  <p class="text-base font-semibold text-gray-900 dark:text-white">
+                    {{ [owner.city, owner.state, owner.postal_code].filter(Boolean).join(', ') }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Map Link -->
+              <div v-if="owner.address" class="pt-3 border-t border-blue-100 dark:border-blue-800/50">
+                <a
+                  :href="`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([owner.address, owner.city, owner.state, owner.postal_code].filter(Boolean).join(', '))}`"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-semibold text-sm transition-colors">
+                  <Icon name="mdi:google-maps" class="w-4 h-4" />
+                  {{ t('owners.viewOnMap') }}
+                  <Icon name="mdi:open-in-new" class="w-3.5 h-3.5" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -180,7 +202,10 @@
               :to="`/pets/${pet.id}`"
               class="block p-4 rounded-xl border border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-all">
               <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 flex items-center justify-center flex-shrink-0">
+                <div v-if="pet.photo_url" class="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
+                  <img :src="pet.photo_url" :alt="pet.name" class="w-full h-full object-cover" />
+                </div>
+                <div v-else class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 flex items-center justify-center flex-shrink-0">
                   <Icon name="mdi:paw" class="w-6 h-6 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div class="flex-1 min-w-0">
@@ -254,7 +279,7 @@
                   <span
                     :class="{
                       'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400': appointment.status === 'confirmed',
-                      'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400': appointment.status === 'scheduled',
+                      'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400': appointment.status === 'pending',
                       'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400': appointment.status === 'completed',
                     }"
                     class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold mt-2 capitalize">
@@ -480,7 +505,7 @@ const fetchOwner = async () => {
   loading.value = true
   try {
     const response = await $apiService.owners.getById(Number(route.params.id))
-    owner.value = response
+    owner.value = response.data || response
   } catch (error) {
     console.error('Error fetching owner:', handleError(error))
   } finally {
@@ -524,6 +549,7 @@ const fetchInvoices = async () => {
   loadingInvoices.value = true
   try {
     const response = await $apiService.invoices.getAll({
+      // @ts-expect-error - user_id is valid for filtering but not in type definition
       user_id: Number(route.params.id),
       per_page: 5
     })

@@ -105,8 +105,8 @@
                 <!-- Pet Image -->
                 <div class="relative h-48 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 overflow-hidden">
                     <img
-                        v-if="pet.image_url"
-                        :src="pet.image_url"
+                        v-if="pet.photo_url"
+                        :src="pet.photo_url"
                         :alt="pet.name"
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
                     <div v-else class="w-full h-full flex items-center justify-center">

@@ -124,7 +124,10 @@
               class="hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 flex items-center justify-center">
+                  <div v-if="appointment.pet?.photo_url" class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0">
+                    <img :src="appointment.pet.photo_url" :alt="appointment.pet?.name" class="w-full h-full object-cover" />
+                  </div>
+                  <div v-else class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 flex items-center justify-center flex-shrink-0">
                     <Icon name="mdi:paw" class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
                   <div>

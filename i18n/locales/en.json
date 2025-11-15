@@ -82,7 +82,12 @@
     "loginSuccess": "Login successful",
     "loginError": "Invalid credentials. Please try again.",
     "logout": "Logout",
-    "demoCredentials": "Demo: Use any email/password to continue"
+    "demoCredentials": "Demo: Use any email/password to continue",
+    "quickLogin": "Quick Login (Demo)",
+    "admin": "Admin",
+    "vet": "Vet",
+    "receptionist": "Receptionist",
+    "cashier": "Cashier"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -334,7 +339,11 @@
     "memberSince": "Member Since",
     "ownerNotFound": "Owner Not Found",
     "ownerNotFoundDesc": "The owner you are looking for does not exist or has been deleted.",
-    "backToOwners": "Back to Owners"
+    "backToOwners": "Back to Owners",
+    "shippingAddress": "Shipping Address",
+    "streetAddress": "Street Address",
+    "cityStatePostal": "City, State & Postal Code",
+    "viewOnMap": "View on Google Maps"
   },
   "products": {
     "title": "Products & Inventory",
@@ -499,16 +508,19 @@
     "backToInvoices": "Back to Invoices",
     "paymentAmount": "Payment Amount",
     "cash": "Cash",
-    "card": "Credit/Debit Card",
+    "creditCard": "Credit Card",
+    "debitCard": "Debit Card",
     "bankTransfer": "Bank Transfer",
-    "check": "Check",
+    "other": "Other",
     "errorLoadingOwners": "Failed to load owners",
     "errorLoadingInvoice": "Failed to load invoice",
     "errorSaving": "Failed to save invoice",
     "deleteConfirm": "Delete Invoice?",
     "deleteWarning": "Are you sure you want to delete invoice",
     "deleteIrreversible": "This action cannot be undone.",
-    "comingSoon": "Invoices module coming soon..."
+    "comingSoon": "Invoices module coming soon...",
+    "customerAddress": "Customer Address",
+    "shippingAddress": "Shipping Address"
   },
   "medicalRecords": {
     "title": "Medical Records",

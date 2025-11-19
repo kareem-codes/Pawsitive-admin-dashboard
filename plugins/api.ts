@@ -12,7 +12,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-    withCredentials: false, // Set to true if backend requires credentials
+    withCredentials: false, // Changed to false - using token auth, not cookies
     timeout: 30000, // 30 second timeout
   });
 
